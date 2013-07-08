@@ -1,0 +1,24 @@
+<form action="<?php echo $this->getUrl('rewardpoints/rewardpoints/redeem') ?>" method="post" id="form-validate">
+        <?php echo $this->getBlockHtml('formkey')?>
+        <ul class="form-list">
+            <li class="fields">
+			    <div class="field">
+			        <label class="required" style="color:#666666" for="email"><?php echo Mage::helper('rewardpoints')->__('Coupon Code');?><em style="color:#EB340A">*</em></label>
+			        <div class="input-box">
+			            <input type="text" class="input-text required-entry" title="coupon_code" name="coupon_code" id="coupon_code" gtbfieldid="135">
+			        </div>
+			    </div>
+            </li>
+            <li>
+                <div class="buttons-set">
+                	<p class="required"><?php echo Mage::helper('rewardpoints')->__("* Required Fields");?></p>
+			        <button class="button" title="<?php echo Mage::helper('rewardpoints')->__("Send");?>" type="submit"><span><span>  <?php echo Mage::helper('rewardpoints')->__("Send");?>  </span></span></button>
+			    </div>
+            </li>
+        </ul>
+</form>
+<script type="text/javascript">
+//<![CDATA[
+    var dataForm = new VarienForm('form-validate', true);
+    //]]>
+</script>

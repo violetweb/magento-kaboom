@@ -1,0 +1,13 @@
+<?php $order = Mage::registry('current_order');?>
+<?php if(!$order) $order = $this->getParentBlock()->getOrder();?>
+<?php $rewardOrder = Mage::getModel('rewardpoints/rewardpointsorder')->load($order->getId())?>
+<?php $store_id = Mage::getModel('sales/order')->load($order->getId())->getStoreId();?>
+<?php $rewardpoints = $rewardOrder->getRewardPoint();?>
+<?php $total_rewardpoint_use =  $rewardpoints + $rewardOrder->getRewardpointSellProduct(); ?>
+
+<?php if($total_rewardpoint_use):?>
+	<tr class="rewardpoints">
+	    <td style="text-align: right;" class="a-right" colspan="4"><b><?php echo Mage::helper("rewardpoints")->__("Total Points")?></b></td>
+	    <td style="text-align: right;"" class="a-right"><span class="price"><?php echo Mage::helper('rewardpoints')->formatPoints($total_rewardpoint_use,$store_id)?></span></td>
+	</tr>
+<?php endif;?>

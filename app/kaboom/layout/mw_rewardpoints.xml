@@ -1,0 +1,171 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+    	<reference name="head">
+			<block type="rewardpoints/facebook_like" name="mw_like_head" as="mw_like_head" template="mw_rewardpoints/facebook/head.phtml" />
+		</reference>
+		<reference name="before_body_end">
+			<block type="rewardpoints/facebook_like" name="mw_like_init" as="mw_like_init" template="mw_rewardpoints/facebook/facebook_init.phtml" />
+		</reference>
+		<reference name="catalog_product_price_template">
+            <action method="addPriceBlockType"><type>simple</type><block>catalog/product_price</block><template>mw_rewardpoints/catalog/product/price.phtml</template></action>
+            <!-- duplicate for each product type you need to handle i.e. change the value of the <type> node" -->
+        </reference>
+    </default>
+    <customer_account translate="label">
+	    <reference name="customer_account_navigation">
+	    	<action method="addLink" translate="label" module="rewardpoints" ifconfig="rewardpoints/config/enabled"><name>reward_points</name><path>rewardpoints/rewardpoints/</path><label>My Reward Points</label></action>
+	    </reference>
+    </customer_account>
+
+    
+    <rewardpoints_rewardpoints_index>
+    	<update handle="customer_account"/>
+    	<reference name="head">
+    		<action method="addJs"><script>mw_js/jquery.js</script></action>
+    		<action method="addJs"><script>mw_rewardpoints/js.js</script></action>
+    	</reference>
+    	<reference name="content">
+	        <block type="rewardpoints/rewardpoints" name="customer_rewardpoints_dashboard" template="mw_rewardpoints/customer/account/rewardpoints.phtml">
+	            <block type="rewardpoints/rewardpoints_info" name="customer_rewardpoints_info" as="info" template="mw_rewardpoints/customer/account/rewardpoints/info.phtml"/>
+	            <block type="rewardpoints/rewardpoints_email" name="customer_rewardpoints_email" as="email" template="mw_rewardpoints/customer/account/rewardpoints/email.phtml"/>
+	            <block type="rewardpoints/rewardpoints_transaction" name="customer_rewardpoints_transaction" as="transaction" template="mw_rewardpoints/customer/account/rewardpoints/transaction.phtml">
+	            	<action method="setPageSize"><page_size>15</page_size></action>
+	            	<block type="rewardpoints/rewardpoints_transaction_note" name="customer_rewardpoints_transaction_note" as="note" template="mw_rewardpoints/customer/account/rewardpoints/transaction/note.phtml"/>
+	            </block>
+                <block type="rewardpoints/rewardpoints_redeem" name="customer_rewardpoints_redeem" as="redeem" template="mw_rewardpoints/customer/account/rewardpoints/redeem.phtml"/>
+	            <block type="core/template" name="customer_rewardpoints_send" as="send" template="mw_rewardpoints/customer/account/rewardpoints/send.phtml"/>
+	            <!-- <block type="core/template" name="customer_rewardpoints_invite" as="invite" template="mw_rewardpoints/customer/account/rewardpoints/invite.phtml"/> -->
+	        </block>
+        </reference>
+    </rewardpoints_rewardpoints_index>
+
+    <checkout_cart_index>
+    	<reference name="head">
+    		<action method="addJs"><script>mw_rewardpoints/slideshow.js</script></action>
+			<action method="addCss"><stylesheet>mw_rewardpoints/css/slider.css</stylesheet></action>
+			<action method="addJs"><script>mw_js/jquery.js</script></action>
+			<action method="addItem"><type>skin_js</type><name>mw_rewardpoints/js/ui/jquery.ui.core.js</name></action>
+			<action method="addItem"><type>skin_js</type><name>mw_rewardpoints/js/ui/jquery.ui.widget.js</name></action>
+			<action method="addItem"><type>skin_js</type><name>mw_rewardpoints/js/ui/jquery.ui.mouse.js</name></action>
+			<action method="addItem"><type>skin_js</type><name>mw_rewardpoints/js/ui/jquery.ui.slider.js</name></action>
+			<action method="addItem"><type>skin_js</type><name>mw_rewardpoints/js/noconflict.js</name></action>
+        </reference>
+        
+    	<reference name="checkout.cart.form.before">
+            <block type="rewardpoints/checkout_cart_message" name="cart.rewardpoints.message"></block>
+            <block type="rewardpoints/checkout_cart_banner" name="cart.rewardpoints.promotion_banner"></block>
+        </reference> 
+        
+	    <reference name="checkout.cart">
+	    	<action method="setCartTemplate" ifconfig="rewardpoints/config/enabled"><value>mw_rewardpoints/checkout/cart.phtml</value></action>
+            <action method="chooseTemplate" ifconfig="rewardpoints/config/overwrite_cart"/>
+	    	<block type="rewardpoints/checkout_cart_rewardpoints" name="rewardpoints.checkout.cart.rewardpoints" as="rewardpoints" template="mw_rewardpoints/checkout/cart/rewardpoints.phtml"/>
+	    </reference>
+	    <reference name="checkout.cart.totals">
+	    	<action method="setTemplate" ifconfig="rewardpoints/config/enabled"><template>mw_rewardpoints/checkout/cart/totals.phtml</template></action>
+	    	<block type="core/template" name="rewardpoints.checkout.cart.totals.rewardpoints" as="rewardpoints" template="mw_rewardpoints/checkout/cart/totals/rewardpoints.phtml"/>
+	    	<block type="core/template" name="rewardpoints.checkout.cart.totals.rewardpoints_totals" as="rewardpoints_totals" template="mw_rewardpoints/checkout/cart/totals/rewardpoints_totals.phtml"/>
+	    </reference>
+    </checkout_cart_index>
+    
+    <rewardpoints_checkout_rewardpointspost>
+    	<reference name="root">
+    		<action method="setTemplate"><template>mw_rewardpoints/page/empty.phtml</template></action>
+    	</reference>
+	    <reference name="content">
+		    <block type="checkout/cart_totals" name="checkout.cart.totals" as="totals" template="mw_rewardpoints/checkout/cart/totals_ajax.phtml">
+		    	<block type="core/template" name="rewardpoints.checkout.cart.totals.rewardpoints" as="rewardpoints" template="mw_rewardpoints/checkout/cart/totals/rewardpoints.phtml"/>
+		    	<block type="core/template" name="rewardpoints.checkout.cart.totals.rewardpoints_totals" as="rewardpoints_totals" template="mw_rewardpoints/checkout/cart/totals/rewardpoints_totals.phtml"/>
+		    </block>
+		</reference>
+    </rewardpoints_checkout_rewardpointspost>
+    
+    <rewardpoints_checkout_updaterules>
+	    <reference name="root">
+	    		<action method="setTemplate"><template>mw_rewardpoints/page/empty.phtml</template></action>
+    	</reference>
+	    <reference name="content">
+		    <block type="rewardpoints/checkout_cart_rewardpoints" name="rewardpoints.checkout.cart.rules" as="rules" template="mw_rewardpoints/checkout/cart/rules.phtml"></block>
+		</reference>
+    </rewardpoints_checkout_updaterules>
+    <checkout_onepage_shippingmethod>
+        <!-- Mage_Checkout -->
+        <remove name="right"/>
+        <remove name="left"/>
+
+        <block type="checkout/onepage_shipping_method_available" name="root" output="toHtml" template="mw_rewardpoints/checkout/onepage/shipping/method/available.phtml"/>
+    </checkout_onepage_shippingmethod>
+    <!--
+    <checkout_onepage_shippingmethod>
+        <reference name="checkout.onepage.shippingmethod">
+            <action method="setTemplate"><template>mw_rewardpoints/checkout/onepage/shipping/method/available.phtml</template></action>
+        </reference>        
+    </checkout_onepage_shippingmethod>
+    -->
+    
+    <checkout_onepage_review>
+    	<reference name="checkout.onepage.review.info.totals">
+    		<action method="setTemplate" ifconfig="rewardpoints/config/enabled"><template>mw_rewardpoints/checkout/onepage/review/totals.phtml</template></action>
+    		<block type="core/template" name="rewardpoints.checkout.onepage.review.info.totals.rewardpoints" as="rewardpoints" template="mw_rewardpoints/checkout/onepage/review/totals/rewardpoints.phtml"/>
+    	</reference>
+    </checkout_onepage_review>
+
+    
+    <sales_order_view translate="label">
+	    <reference name="order_totals">
+	    	<action method="setTemplate" ifconfig="rewardpoints/config/enabled"><template>mw_rewardpoints/sales/order/totals.phtml</template></action>
+	    	<block type="core/template" name="rewardpoints.checkout.onepage.review.info.totals.rewardpoints" as="rewardpoints" template="mw_rewardpoints/sales/order/totals/rewardpoints.phtml"/>
+	    	<block type="core/template" name="checkout.onepage.total_rewardpoints" as="rewardpoints_totals" template="mw_rewardpoints/sales/order/totals/rewardpoints_totals.phtml"/>
+	    </reference>
+    </sales_order_view>
+    
+    <sales_order_print translate="label">
+	    <reference name="order_totals">
+	    	<action method="setTemplate" ifconfig="rewardpoints/config/enabled"><template>mw_rewardpoints/sales/order/totals.phtml</template></action>
+	    	<block type="core/template" name="rewardpoints.checkout.onepage.review.info.totals.rewardpoints" as="rewardpoints" template="mw_rewardpoints/sales/order/totals/rewardpoints.phtml"/>
+	    	<block type="core/template" name="checkout.onepage.total_rewardpoints" as="rewardpoints_totals" template="mw_rewardpoints/sales/order/totals/rewardpoints_totals.phtml"/>
+	    </reference>
+    </sales_order_print>
+    
+    <sales_order_invoice translate="label">
+	    <reference name="invoice_totals">
+	    	<action method="setTemplate" ifconfig="rewardpoints/config/enabled"><template>mw_rewardpoints/sales/order/totals.phtml</template></action>
+	    	<block type="core/template" name="rewardpoints.checkout.onepage.review.info.totals.rewardpoints" as="rewardpoints" template="mw_rewardpoints/sales/order/totals/rewardpoints.phtml"/>
+	    	<block type="core/template" name="checkout.onepage.total_rewardpoints" as="rewardpoints_totals" template="mw_rewardpoints/sales/order/totals/rewardpoints_totals.phtml"/>
+	    </reference>
+    </sales_order_invoice>
+    
+     <sales_order_printinvoice translate="label">
+	    <reference name="invoice_totals">
+	    	<action method="setTemplate" ifconfig="rewardpoints/config/enabled"><template>mw_rewardpoints/sales/order/totals.phtml</template></action>
+	    	<block type="core/template" name="rewardpoints.checkout.onepage.review.info.totals.rewardpoints" as="rewardpoints" template="mw_rewardpoints/sales/order/totals/rewardpoints.phtml"/>
+	    	<block type="core/template" name="checkout.onepage.total_rewardpoints" as="rewardpoints_totals" template="mw_rewardpoints/sales/order/totals/rewardpoints_totals.phtml"/>
+	    </reference>
+    </sales_order_printinvoice>
+    
+    <sales_order_creditmemo translate="label">
+	    <reference name="creditmemo_totals">
+	    	<action method="setTemplate" ifconfig="rewardpoints/config/enabled"><template>mw_rewardpoints/sales/order/totals.phtml</template></action>
+	    	<block type="core/template" name="rewardpoints.checkout.onepage.review.info.totals.rewardpoints" as="rewardpoints" template="mw_rewardpoints/sales/order/totals/creditmemo_rewardpoints.phtml"/>
+	   		<block type="core/template" name="checkout.onepage.total_rewardpoints" as="rewardpoints_totals" template="mw_rewardpoints/sales/order/totals/creditmemo_rewardpoints_totals.phtml"/>
+	    </reference>
+    </sales_order_creditmemo>
+    
+     <sales_order_printcreditmemo translate="label">
+	    <reference name="creditmemo_totals">
+	    	<action method="setTemplate" ifconfig="rewardpoints/config/enabled"><template>mw_rewardpoints/sales/order/totals.phtml</template></action>
+	    	<block type="core/template" name="rewardpoints.checkout.onepage.review.info.totals.rewardpoints" as="rewardpoints" template="mw_rewardpoints/sales/order/totals/creditmemo_rewardpoints.phtml"/>
+	    	<block type="core/template" name="checkout.onepage.total_rewardpoints" as="rewardpoints_totals" template="mw_rewardpoints/sales/order/totals/creditmemo_rewardpoints_totals.phtml"/>
+	    </reference>
+    </sales_order_printcreditmemo>
+    
+    
+    <sales_email_order_items>
+    	<reference name="order_totals">
+    		<action method="setTemplate" ifconfig="rewardpoints/config/enabled"><template>mw_rewardpoints/sales/order/totals.phtml</template></action>
+    		<block type="core/template" name="rewardpoints.checkout.onepage.review.info.totals.rewardpoints" as="rewardpoints" template="mw_rewardpoints/sales/order/totals/email_rewardpoints.phtml"/>
+    		<block type="core/template" name="checkout.onepage.total_rewardpoints" as="rewardpoints_totals" template="mw_rewardpoints/sales/order/totals/email_rewardpoints_totals.phtml"/>
+    	</reference>
+    </sales_email_order_items>
+</layout> 

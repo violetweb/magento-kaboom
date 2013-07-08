@@ -1,0 +1,29 @@
+<?php $order = Mage::registry('current_order');?>
+<?php if(!$order) $order = $this->getParentBlock()->getOrder();?>
+<?php $rewardOrder = Mage::getModel('rewardpoints/rewardpointsorder')->load($order->getId())?>
+<?php $rewardpoints = $rewardOrder->getRewardPoint();?>
+<?php $earn_rewardpoint = (int)$rewardOrder->getEarnRewardpoint();?>
+<?php //$total_rewardpoint_use =  $rewardpoints + $rewardOrder->getRewardpointSellProduct(); ?>
+<?php $store_id = Mage::getModel('sales/order')->load($order->getId())->getStoreId();?>
+
+<?php if($earn_rewardpoint):?>
+	<tr class="rewardpoints">
+	    <td style="text-align: right;" class="a-right" colspan="4"><?php echo Mage::helper("rewardpoints")->__("You Earn")?></td>
+	    <td style="text-align: right;"" class="a-right"><span class="price"><?php echo Mage::helper('rewardpoints')->formatPoints($earn_rewardpoint,$store_id)?></span></td>
+	</tr>
+<?php endif;?>
+
+<?php if($rewardpoints):?>
+	<?php $money = $rewardOrder->getMoney();?>
+	<tr class="rewardpoints">
+	    <td style="" class="a-right" colspan="3"><?php echo Mage::helper("rewardpoints")->__("You Redeemed")?></td>
+	    <td style="" class="a-right"><span class="price"><?php echo Mage::helper('rewardpoints')->formatPoints($rewardpoints,$store_id)." = ".Mage::helper('rewardpoints')->formatMoney(-$money)?></span></td>
+	</tr>
+<?php endif;?>
+
+<?php /* if($total_rewardpoint_use):?>
+	<tr class="rewardpoints">
+	    <td style="text-align: right;" class="a-right" colspan="4"><b><?php echo Mage::helper("rewardpoints")->__("Total Points")?></b></td>
+	    <td style="text-align: right;"" class="a-right"><span class="price"><?php echo Mage::helper('rewardpoints')->formatPoints($total_rewardpoint_use,$store_id)?></span></td>
+	</tr>
+<?php endif; */?>

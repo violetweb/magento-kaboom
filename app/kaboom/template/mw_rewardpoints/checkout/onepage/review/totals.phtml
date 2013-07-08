@@ -1,0 +1,59 @@
+<?php $check = version_compare(Mage::getVersion(),'1.4.0.1','>=');?>
+<?
+$cart = Mage::getSingleton("checkout/cart");
+$cart_items = $cart->getItems();
+$total = 0;
+foreach($cart_items as $item){
+    $i = $item->toArray();
+    $product = Mage::getModel('catalog/product')->load($i['product']['entity_id'])->toArray();            
+    if($product["reward_point_product"] == 0){
+        $total += $product["price"];
+    } else {
+        $item->setData("free_shipping",true);
+        $item->save();
+    }    
+}
+$totals = array();
+foreach($this->getTotals() as $t){
+    $t->setData("value",(float)$total);
+    $totals[$t->getData('code')] = $t;
+}
+$this->setTotals($totals);
+?>
+<?php if($check):?>
+	<?php if ($this->getTotals()): ?>
+	<tfoot>
+	    <?php $_colspan = $this->helper('tax')->displayCartBothPrices() ? 5 : 3; ?>
+	    <?php /*********************************************************************/?>
+		<?php echo $this->getChildHtml('credit');?>
+	    <?php echo $this->getChildHtml('rewardpoints');?>
+	    <?php /*********************************************************************/?>
+
+	    <?php echo $this->renderTotals(null, $_colspan); ?>
+	    	    
+	    <?php echo $this->renderTotals('footer', $_colspan); ?>
+	    <?php if ($this->needDisplayBaseGrandtotal()):?>
+	    <tr>
+	        <td class="a-right" colspan="<?php echo $_colspan; ?>">
+	            <small><?php echo $this->helper('sales')->__('Your credit card will be charged for') ?></small>
+	        </td>
+	        <td class="a-right">
+	            <small><?php echo $this->displayBaseGrandtotal() ?></small>
+	        </td>
+	    </tr>
+	    <?php endif?>
+	</tfoot>
+	<?php endif; ?>
+<?php else:?>
+	<?php if ($this->getTotals()): ?>
+	<tfoot>
+	    <?php $_colspan = $this->helper('tax')->displayCartBothPrices() ? 5 : 3; ?>
+	    <?php /*********************************************************************/?>
+	    <?php echo $this->getChildHtml('credit');?>
+	    <?php echo $this->getChildHtml('rewardpoints');?>
+	    <?php /*********************************************************************/?>
+	    <?php echo $this->renderTotals(null, $_colspan); ?>
+	    <?php echo $this->renderTotals('footer', $_colspan); ?>
+	</tfoot>
+	<?php endif; ?>
+<?php endif;?>

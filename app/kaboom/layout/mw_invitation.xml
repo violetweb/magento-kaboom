@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+    </default>
+    <customer_account translate="label">
+	    <reference name="customer_account_navigation">
+	    	<action method="addLink" translate="label" module="invitation" ifconfig="invitation/config/enabled"><name>invitation</name><path>invitation/invitation/</path><label>My Invitations</label></action>
+	    </reference>
+    </customer_account>
+   <invitation_invitation_index>
+   <update handle="customer_account"/>
+    	<reference name="content">
+	        <block type="invitation/invitation" name="customer_invitation_dashboard" template="mw_invitation/customer/account/invitation.phtml">
+	            <block type="invitation/invitation_form" name="customer_invitation_form" as="invite_form" template="mw_invitation/customer/account/invitation/invite_form.phtml"/>
+	        </block>
+        </reference>
+   </invitation_invitation_index>
+   <invitation_invitation_loginmail>
+   		<reference name="root">
+            <action method="setTemplate"><template>page/empty.phtml</template></action>
+        </reference>
+    	<reference name="content">
+	    	<block type="invitation/invitation_mail"  template="mw_invitation/customer/account/invitation/login_mail.phtml"/>
+        </reference>
+   </invitation_invitation_loginmail>
+   <invitation_invitation_processmail>
+   		<reference name="root">
+            <action method="setTemplate"><template>page/empty.phtml</template></action>
+        </reference>
+    	<reference name="content">
+	    	<block type="invitation/invitation_mail" name="process_mail" as="process_mail" template="mw_invitation/customer/account/invitation/process_mail.phtml"/>
+        </reference>
+   </invitation_invitation_processmail>
+</layout>

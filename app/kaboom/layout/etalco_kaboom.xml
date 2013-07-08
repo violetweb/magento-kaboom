@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <kaboom_index_index>
+        <reference name="root">
+            <action method="setTemplate"><template>page/1column.phtm</template></action>
+        </reference>
+        <reference name="content">
+            <block type="kaboom/product" name="product_type_list" template="etalco_kaboom/product/type/list.phtml"/>
+        </reference>
+    </kaboom_index_index>
+</layout>
